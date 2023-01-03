@@ -55,6 +55,7 @@ export class ScenePreloadAssets extends Phaser.Scene
         this.load.image("ship1", "ship.png");
         this.load.image("ship2", "ship2.png");
         this.load.image("ship3", "ship3.png");
+        this.load.image("explosion", "explosion.png");
         this.load.atlas('player','./player/player.png','./player/player.json')
         this.load.atlas('enemy01','./Enemy01/enemy01.png','./Enemy01/enemy01.json')
         this.load.atlas('enemy02','./Enemy02/enemy02.png','./Enemy02/enemy02.json')

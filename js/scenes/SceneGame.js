@@ -30,6 +30,8 @@ export class SceneGame extends Phaser.Scene
 
     diamondPoints = 0;
 
+    cinematicOn = false;
+
     constructor()
     {
         super({key: CST.SCENES.GAME});
@@ -63,10 +65,11 @@ export class SceneGame extends Phaser.Scene
     ////////////////////////////////////////////////////////////////////////
 
     create()
-    {        
+    {       
+        this.cinematicOn = false;
         this.createLevel();
-        this.time.delayedCall(100,()=> this.showDialogue(
-            'Unfortunately, your spaceship crashed,and you landed on an unknown planet. \n you have to find the back-up spaceship now, try to stay alive! \n press "WASD" in the kayboard to move, "K" to attack and "space" to jump \n "heart" on the top left indicates your health status,and try collect more "diamond" \n good luck and hope you find your way home soon!'))
+        this.startShipAnim()
+        
     }
 
     createLevel()
@@ -273,7 +276,38 @@ export class SceneGame extends Phaser.Scene
        this.sceneGameUI.showDialogue(message)
        this.scene.pause()
     }
-    
+    startShipAnim(){
+            this.cinematicOn = true;
+            this.player.setVisible(false)
+            const ship = this.add.image(this.player.x + 500, this.player.y - 500, "ship1");
+            // ship.setRotation(Math.atan2(ship.y-this.player.y,ship.x-this.player.x)-Math.PI/4-Math.PI/2)
+            ship.setAngle(180)
+            this.tweens.add({
+                    targets: ship,
+                    x: this.player.x,
+                    y: this.player.y,
+                    duration: 6000,
+                    onComplete:()=>{
+                    ship.destroy();
+                    this.cameras.main.shake(400, 0.002, false);
+                    const explosion = this.add.image(this.player.x, this.player.y, "explosion").setScale(1);
+                    this.time.delayedCall(1500, () => {
+                    explosion.destroy();
+                    this.player.setVisible(true);
+                    this.player.anims.play('Run')
+                    this.player.walkOnRight(60)
+                    this.time.delayedCall(1500, () => {
+                        this.player.anims.play("Idle")
+                        this.player.stopWalking()
+                        this.showDialogue(
+                            'Unfortunately, your spaceship crashed,and you landed on an unknown planet. \n you have to find the back-up spaceship now, try to stay alive! \n press "WASD" in the kayboard to move, "K" to attack and "space" to jump \n "heart" on the top left indicates your health status,and try collect more "diamond" \n good luck and hope you find your way home soon!')
+                        this.cinematicOn = false
+                    })
+                    });
+                    },
+                    onCompleteScope:this
+                    })
+    }
     // Update
     ////////////////////////////////////////////////////////////////////////
 
@@ -283,7 +317,9 @@ export class SceneGame extends Phaser.Scene
         
         if (this.player)
         {
-            this.player.update();
+            if(!this.cinematicOn){
+                this.player.update();
+            }
             this.bg2.tilePositionX = this.player.x *0.2;
             this.bg3.tilePositionX = this.player.x *0.2;
         }

@@ -125,20 +125,21 @@ export class Character extends Phaser.Physics.Arcade.Sprite
         }
     }
 
-    walkOnLeft()
-    {
+    walkOnLeft(walkSpeed)
+    {   walkSpeed = walkSpeed?walkSpeed:this.walkSpeed
         this.lookOnLeft();
 
         const currentWalkSpeedY = this.body.velocity.y;
-        this.walk(-this.walkSpeed, currentWalkSpeedY);
+        this.walk(-walkSpeed, currentWalkSpeedY);
     }
 
-    walkOnRight()
+    walkOnRight(walkSpeed)
     {
+        walkSpeed = walkSpeed?walkSpeed:this.walkSpeed
         this.lookOnRight();
 
         const currentWalkSpeedY = this.body.velocity.y;
-        this.walk(this.walkSpeed, currentWalkSpeedY);
+        this.walk(walkSpeed, currentWalkSpeedY);
     }
 
     walk(x, y)
