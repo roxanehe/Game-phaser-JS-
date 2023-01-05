@@ -27,7 +27,7 @@ export class SceneMainMenu_UI extends Phaser.Scene
         this.createBackground()
         const titleStyle = { fontSize : "84px", color: CST.STYLE.COLOR.WHITE, strokeThickness : 4, stroke: "#000000", fontStyle: "bold",fontFamily:'fantasy'};
         const buttonStyle = { fontSize : "50px", color: CST.STYLE.COLOR.WHITE, strokeThickness : 4, fontStyle: "normal",fontFamily:'fantasy'};
-        this.title = this.add.text(280, 100, "ROCKY WORLD SURVIVAL", titleStyle);
+        this.title = this.add.text(CST.GAME.WIDTH/6, 100, "ROCKY WORLD SURVIVAL", titleStyle);
         const buttonLevel =  new TextButton(this, 650, 450, "START", buttonStyle);
         buttonLevel.onClicked(() => { this.launchLevel(1); }, this);
         buttonLevel.onHovered(() => { this.onButtonHovered(buttonLevel); }, this);
@@ -37,7 +37,8 @@ export class SceneMainMenu_UI extends Phaser.Scene
     createBackground(){
         const bg1 = this.add.image(0,0,'menubg1');
         bg1.setOrigin(0);
-        bg1.setScale(3);
+        bg1.displayWidth = CST.GAME.WIDTH;
+        bg1.displayHeight = CST.GAME.HEIGHT;
         bg1.setScrollFactor(0);
         this.bg2 = this.add.tileSprite(0,0,CST.GAME.WIDTH,CST.GAME.HEIGHT,'menubg2');
         this.bg2.setTileScale(3);

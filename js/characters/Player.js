@@ -6,9 +6,10 @@ export class Player extends Character {
 
     constructor(scene, x, y) {
         super(scene, x, y);
-        this.hitboxOffsetX = -5;
+        this.hitboxOffsetX = -15;
         this.hitboxOffsetY = 14;
-
+        this.hitboxWidth = 30;
+        this.hitboxHeight = 32;
         this.on(Phaser.Animations.Events.ANIMATION_START, (anim, frame) => {
         }, this);
         this.on(Phaser.Animations.Events.ANIMATION_COMPLETE, (anim, frame) => {
@@ -157,10 +158,16 @@ export class Player extends Character {
     die() {
         super.die();
         this.anims.play('Die')
+        
     }
     meleeAttack() {
         super.meleeAttack();
         this.anims.play("AttackA")
+        
+    }
+    jump(){
+        super.jump();
+        this.scene.sound.play('jump')
     }
     recover() {
         super.recover();

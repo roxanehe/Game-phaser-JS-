@@ -26,6 +26,7 @@ export class ScenePreloadAssets extends Phaser.Scene
         this.preloadBackground();
         this.preloadUI();
         this.preloadPluggins();
+        this.preloadAudio()
     }
     preloadBackground(){
         this.load.setPath('./assets/background');
@@ -79,7 +80,16 @@ export class ScenePreloadAssets extends Phaser.Scene
     preloadPluggins(){
         this.load.scenePlugin('rexuiplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js', 'rexUI', 'rexUI');
     }
-
+    preloadAudio() {
+        this.load.setPath("./assets/audio");
+        this.load.audio("loopMusic","./06 Unholy Illusions (LOOP).wav")
+        this.load.audio("shipExplosion","./Boss Kill 2.wav")
+        this.load.audio("enemyKill","./Enemy Kill 5.wav")
+        this.load.audio("playerHit","./Character Hit 4.wav")
+        this.load.audio("enemyHit","./Hit 2.wav")
+        this.load.audio("jump","./Jump 1.wav")
+        this.load.audio("item","./Item or Coin 1.wav")
+        }
     // Create
     ////////////////////////////////////////////////////////////////////////
   

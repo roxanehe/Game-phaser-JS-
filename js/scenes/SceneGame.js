@@ -56,7 +56,6 @@ export class SceneGame extends Phaser.Scene
     preloadMap()
     {
         this.load.setPath("./assets/maps");
-
         const levelName = "level" + this.currentLevel.toString();
         this.load.tilemapTiledJSON(levelName, "./" + levelName + ".json");
     }
@@ -68,6 +67,8 @@ export class SceneGame extends Phaser.Scene
     {       
         this.cinematicOn = false;
         this.createLevel();
+        this.loopMusic = this.sound.add("loopMusic",{volume:0.3,loop:true})
+        this.loopMusic.play();
         this.startShipAnim()
         
     }
@@ -218,24 +219,26 @@ export class SceneGame extends Phaser.Scene
         // Npcs collides with platforms if canNpcCollidePlatforms return true
         this.physics.add.collider(this.npcs, this.platforms);
 
-        this.physics.add.overlap(this.player.Meleehitbox, this.npcs, this.onPlayerAttackNpc,this.canPlayerAttackNpc)
+        this.physics.add.overlap(this.player.Meleehitbox, this.npcs, this.onPlayerAttackNpc,this.canPlayerAttackNpc,this)
         // Player overlap npc only if the player is on the left of the npc. console.log on overlap
         this.physics.add.overlap(this.player, this.npcs, this.onPlayerOverlapNpc, this.canPlayerOverlapNpc, this);
 
         this.physics.add.overlap(this.player, this.items, this.onPlayerOverlapItems, this.canPlayerOverlapItems, this);
 
-        this.npcs.getChildren().forEach((npc)=>{this.physics.add.overlap(this.player, npc.Meleehitbox, this.onNpcAttackPlayer,this.canNpcAttackPlayer)})
+        this.npcs.getChildren().forEach((npc)=>{this.physics.add.overlap(this.player, npc.Meleehitbox, this.onNpcAttackPlayer,this.canNpcAttackPlayer,this)})
         
         this.physics.add.overlap(this.player, this.ships, this.onPlayerOverlapShip, this.canPlayerOverlapShip, this);
 
     }
     onPlayerAttackNpc(meleehitbox,npc){
+        this.sound.play('playerHit')
         npc.hurt(npc.body.touching.left,50);
     }
     canPlayerAttackNpc(meleehitbox,npc){
         return !meleehitbox.character.isDead() &&  !npc.isDead() && !npc.isRecovering;
     }
     onNpcAttackPlayer(player,meleehitbox){
+        this.sound.play('enemyHit')
         player.hurt(player.body.touching.left,150);
 
     }
@@ -254,6 +257,7 @@ export class SceneGame extends Phaser.Scene
     }
     onPlayerOverlapItems(player,item){
        item.onTouch(player);
+       this.sound.play('item')
     }
     canPlayerOverlapItems(player,item){
         return !player.isDead()
@@ -290,6 +294,7 @@ export class SceneGame extends Phaser.Scene
                     onComplete:()=>{
                     ship.destroy();
                     this.cameras.main.shake(400, 0.002, false);
+                    this.sound.play('shipExplosion')
                     const explosion = this.add.image(this.player.x, this.player.y, "explosion").setScale(1);
                     this.time.delayedCall(1500, () => {
                     explosion.destroy();

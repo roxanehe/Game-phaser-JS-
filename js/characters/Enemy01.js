@@ -64,6 +64,7 @@ updateAnimations()
     }
     die(){
         super.die();
+        this.scene.sound.play('enemyKill')
         this.anims.play('Hit')
     }
 }
