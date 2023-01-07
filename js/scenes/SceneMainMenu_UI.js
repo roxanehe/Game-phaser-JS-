@@ -60,7 +60,7 @@ export class SceneMainMenu_UI extends Phaser.Scene
         buttonLevel2.setDepth(1)
         this.selectLevelPageContainer.add(buttonLevel2);
 
-        this.animateMenu()
+        // this.animateMenu()
     }
     createBackground(){
         const bg1 = this.add.image(0,0,'menubg1');
