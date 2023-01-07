@@ -88,15 +88,15 @@ export class SceneGame extends Phaser.Scene
         this.createUI();
     }
     createBackground(){
-        const bg1 = this.add.image(0,0,'bg1');
+        const bg1 = this.add.image(0,0,'bg1_level' + this.currentLevel);
         bg1.setOrigin(0);
         bg1.setScale(3);
         bg1.setScrollFactor(0);
-        this.bg2 = this.add.tileSprite(0,0,CST.GAME.WIDTH,CST.GAME.HEIGHT,'bg2');
+        this.bg2 = this.add.tileSprite(0,0,CST.GAME.WIDTH,CST.GAME.HEIGHT,'bg2_level' + this.currentLevel);
         this.bg2.setTileScale(3);
         this.bg2.setOrigin(0);
         this.bg2.setScrollFactor(0);
-        this.bg3 = this.add.tileSprite(0,0,CST.GAME.WIDTH,CST.GAME.HEIGHT,'bg3');
+        this.bg3 = this.add.tileSprite(0,0,CST.GAME.WIDTH,CST.GAME.HEIGHT,'bg3_level' + this.currentLevel);
         this.bg3.setTileScale(3);
         this.bg3.setOrigin(0);
         this.bg3.setScrollFactor(0);

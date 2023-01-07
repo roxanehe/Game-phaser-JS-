@@ -30,9 +30,12 @@ export class ScenePreloadAssets extends Phaser.Scene
     }
     preloadBackground(){
         this.load.setPath('./assets/background');
-        this.load.image('bg1','background01.png');
-        this.load.image('bg2','background02.png');
-        this.load.image('bg3','background03.png');
+        this.load.image('bg1_level1','background1_level1.png');
+        this.load.image('bg2_level1','background2_level1.png');
+        this.load.image('bg3_level1','background3_level1.png');
+        this.load.image('bg1_level2','background1_level2.png');
+        this.load.image('bg2_level2','background2_level2.png');
+        this.load.image('bg3_level2','background3_level2.png');
         this.load.image('menubg1','menubackground1.png');
         this.load.image('menubg2','menubackground2.png');
         this.load.image('menubg3','menubackground3.png');
