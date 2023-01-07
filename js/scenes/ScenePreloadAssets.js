@@ -36,7 +36,7 @@ export class ScenePreloadAssets extends Phaser.Scene
         this.load.image('menubg1','menubackground1.png');
         this.load.image('menubg2','menubackground2.png');
         this.load.image('menubg3','menubackground3.png');
-        // this.load.image('mainmenu','mainmenubackground.png');
+        this.load.image('space','spacebackground.png');
 
         this.load.image('dialogue','dialogueBackground.png');
 

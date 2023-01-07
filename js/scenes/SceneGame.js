@@ -64,14 +64,16 @@ export class SceneGame extends Phaser.Scene
     ////////////////////////////////////////////////////////////////////////
 
     create()
-    {       
+    {   
+         
         this.cinematicOn = false;
-        this.createLevel();
-        this.loopMusic = this.sound.add("loopMusic",{volume:0.3,loop:true})
-        this.loopMusic.play();
         if(this.currentLevel==1){
-            this.startShipAnim()
-        } 
+            this.startSpaceAnim()
+        }
+        else{this.createLevel()}
+        this.loopMusic = this.sound.add("loopMusic",{volume:0.3,loop:true})
+        this.loopMusic.play(); 
+
     }
 
     createLevel()
@@ -301,11 +303,11 @@ export class SceneGame extends Phaser.Scene
                     targets: ship,
                     x: this.player.x,
                     y: this.player.y,
-                    duration: 6000,
+                    duration: 4000,
                     onComplete:()=>{
                     ship.destroy();
                     this.cameras.main.shake(400, 0.002, false);
-                    this.sound.play('shipExplosion')
+                    this.sound.play('shipExplosion',{volume:0.5})
                     const explosion = this.add.image(this.player.x, this.player.y, "explosion").setScale(1);
                     this.time.delayedCall(1500, () => {
                     explosion.destroy();
@@ -315,8 +317,7 @@ export class SceneGame extends Phaser.Scene
                     this.time.delayedCall(1500, () => {
                         this.player.anims.play("Idle")
                         this.player.stopWalking()
-                        this.showDialogue(
-                            'Unfortunately, your spaceship crashed,and you landed on an unknown planet. \n you have to find the back-up spaceship now, try to stay alive! \n press "WASD" in the kayboard to move, "K" to attack and "space" to jump \n "heart" on the top left indicates your health status,and try collect more "diamond" \n good luck and hope you find your way home soon!')
+                        this.showDialogue('Press "ENTER" to move to the next sentence or "ESC" to exit this dialogue.\n Unfortunately, your spaceship crashed,and you landed on an unknown planet. \n You have to find the back-up spaceship now, try to stay alive! \n press "WASD" to move, "K" to attack and "space" to jump, use combinations of keys too \n "heart" on the top left indicates your health status,and try collect more "diamond" \n good luck and hope you find your way home soon!')
                         this.cinematicOn = false
                     })
                     });
@@ -324,6 +325,34 @@ export class SceneGame extends Phaser.Scene
                     onCompleteScope:this
                     })
     }
+    startSpaceAnim(){
+        const space = this.add.image(CST.GAME.WIDTH/2,CST.GAME.HEIGHT/2,'space').setOrigin(0.5)
+        this.cinematicOn = true;
+        const ship = this.add.image(1000, 100, "ship1").setScale(1.5);
+        // ship.setRotation(Math.atan2(ship.y-this.player.y,ship.x-this.player.x)-Math.PI/4-Math.PI/2)
+        ship.setAngle(180)
+        const titleStyle = { fontSize : "40px", color: CST.STYLE.COLOR.WHITE, strokeThickness : 4, stroke: "#000000", fontStyle: "bold",fontFamily:'fantasy'};
+        const title = this.add.text(CST.GAME.WIDTH/2, 600, "You are on the mission in a spacetrip, but something is wrong with your spaceship ", titleStyle).setOrigin(0.5)
+        this.tweens.add({
+                targets: ship,
+                x: 600,
+                y: 600,
+                duration: 3000,
+                onComplete:()=>{
+                    const explosion = this.add.image(ship.x, ship.y, "explosion").setScale(1);
+                    this.time.delayedCall(1500, () => {
+                      explosion.destroy();
+                      space.destroy();
+                      this.cinematicOn = false;
+                      this.createLevel();
+                      this.startShipAnim();
+                    })
+                    ship.destroy();
+                    title.destroy();
+                },
+                onCompleteScope:this
+                })
+}
     // Update
     ////////////////////////////////////////////////////////////////////////
 
