@@ -27,11 +27,39 @@ export class SceneMainMenu_UI extends Phaser.Scene
         this.createBackground()
         const titleStyle = { fontSize : "84px", color: CST.STYLE.COLOR.WHITE, strokeThickness : 4, stroke: "#000000", fontStyle: "bold",fontFamily:'fantasy'};
         const buttonStyle = { fontSize : "50px", color: CST.STYLE.COLOR.WHITE, strokeThickness : 4, fontStyle: "normal",fontFamily:'fantasy'};
-        this.title = this.add.text(CST.GAME.WIDTH/6, 100, "ROCKY WORLD SURVIVAL", titleStyle);
-        const buttonLevel =  new TextButton(this, 650, 450, "START", buttonStyle);
-        buttonLevel.onClicked(() => { this.launchLevel(1); }, this);
-        buttonLevel.onHovered(() => { this.onButtonHovered(buttonLevel); }, this);
-        buttonLevel.setDepth(1);
+        const buttonLevelStyle = { fontSize : "60px", color: CST.STYLE.COLOR.WHITE, strokeThickness : 4, fontStyle: "normal",fontFamily:'fantasy'}
+        this.title = this.add.text(CST.GAME.WIDTH/2, 100, "ROCKY WORLD SURVIVAL", titleStyle).setOrigin(0.5)
+        this.mainPageContainer = this.add.container(0,0);
+        this.mainPageContainer.setDepth(1);
+        this.selectLevelPageContainer = this.add.container(0,0);
+        this.selectLevelPageContainer.setDepth(1);
+        this.selectLevelPageContainer.setVisible(false)
+
+        const buttonStart =  new TextButton(this, CST.GAME.WIDTH/2, 450, "START", buttonStyle).setOrigin(0.5);
+        buttonStart.onClicked(() => { this.launchLevel(1); }, this);
+        buttonStart.onHovered(() => { this.onButtonHovered(buttonStart); }, this);
+        buttonStart.setDepth(1);
+        this.mainPageContainer.add(buttonStart);
+
+        const buttonSelectLevel =  new TextButton(this, CST.GAME.WIDTH/2, 550, "SELECT LEVEL", buttonStyle).setOrigin(0.5)
+        buttonSelectLevel.onClicked(() => { this.mainPageContainer.setVisible(false);
+            this.selectLevelPageContainer.setVisible(true) }, this);
+        buttonSelectLevel.onHovered(() => { this.onButtonHovered(buttonSelectLevel); }, this);
+        buttonSelectLevel.setDepth(1);
+        this.mainPageContainer.add(buttonSelectLevel);
+
+        const buttonLevel1 = new TextButton(this, CST.GAME.WIDTH / 4, 450, "LEVEL 1", buttonLevelStyle).setOrigin(0.5);
+        buttonLevel1.onClicked(() => { this.launchLevel(1); }, this);
+        buttonLevel1.onHovered(() => { this.onButtonHovered(buttonLevel1); }, this);
+        buttonLevel1.setDepth(1);
+        this.selectLevelPageContainer.add(buttonLevel1);
+
+        const buttonLevel2 = new TextButton(this, CST.GAME.WIDTH * 3 / 4, 450, "LEVEL 2 ", buttonLevelStyle).setOrigin(0.5);
+        buttonLevel2.onClicked(() => { this.launchLevel(2); }, this);
+        buttonLevel2.onHovered(() => { this.onButtonHovered(buttonLevel2); }, this);
+        buttonLevel2.setDepth(1)
+        this.selectLevelPageContainer.add(buttonLevel2);
+
         this.animateMenu()
     }
     createBackground(){

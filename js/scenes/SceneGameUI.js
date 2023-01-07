@@ -12,6 +12,7 @@ super({key: CST.SCENES.GAME_UI});
 
 init(data) {
 this.sceneGame = data.sceneGame;
+this.currentLevel = this.sceneGame.currentLevel
 this.sceneGame.events.on('levelClear',this.onLevelClear,this)
 }
 
@@ -30,7 +31,8 @@ create(){
     this.endlevelbackground = this.add.graphics()
     this.endlevelbackground.setVisible(false)
 
-    this.endlevelText = this.add.text(CST.GAME.WIDTH/2, CST.GAME.HEIGHT/2, "Congrats, you can move to next level!", { color: "white", fontSize: "40px", bold: true }).setOrigin(0.5);
+    this.endlevelText = this.add.text(CST.GAME.WIDTH/2, CST.GAME.HEIGHT/2, this.currentLevel<CST.GAME.LEVEL_COUNT?
+    "Congrats, you can move to next level!":"Congrats, you finished the game!", { color: "white", fontSize: "40px", bold: true }).setOrigin(0.5);
     this.endlevelText.setVisible(false)
 }
 update(){
@@ -59,7 +61,12 @@ onLevelClear(){
   this.tweens.add({targets:this.endlevelbackground,x:0,duration:2000,delay:500,onUpdate:()=>{
     this.endlevelbackground.clear();
     this.endlevelbackground.fillRect(this.endlevelbackground.x,0,CST.GAME.WIDTH,CST.GAME.HEIGHT)
-},onComplete:()=>this.endlevelText.setVisible(true),onCompleteScope:this})
+},onComplete:()=>{this.endlevelText.setVisible(true);
+                  if(this.sceneGame.currentLevel<CST.GAME.LEVEL_COUNT){
+                    this.time.delayedCall(3000, ()=> {this.sceneGame.scene.restart({level:this.sceneGame.currentLevel+1});
+                })}
+                }
+,onCompleteScope:this})
 }
 
 createDialogue(){

@@ -69,8 +69,9 @@ export class SceneGame extends Phaser.Scene
         this.createLevel();
         this.loopMusic = this.sound.add("loopMusic",{volume:0.3,loop:true})
         this.loopMusic.play();
-        this.startShipAnim()
-        
+        if(this.currentLevel==1){
+            this.startShipAnim()
+        } 
     }
 
     createLevel()
@@ -274,7 +275,17 @@ export class SceneGame extends Phaser.Scene
         return !player.isDead()
     }
     createUI(){
-       this.sceneGameUI = this.scene.add(CST.SCENES.GAME_UI,SceneGameUI,true,{sceneGame:this});
+       const sceneData = {sceneGame:this};
+       if (this.sceneGameUI)
+        {
+            this.sceneGameUI.scene.setActive(true);
+            this.sceneGameUI.scene.setVisible(true);
+            this.sceneGameUI.scene.restart(sceneData);
+        }
+        else
+        {
+            this.sceneGameUI = this.scene.add(CST.SCENES.GAME_UI,SceneGameUI,true,sceneData);
+        }
     }
     showDialogue(message){
        this.sceneGameUI.showDialogue(message)
