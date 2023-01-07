@@ -36,7 +36,7 @@ die(){
 }
 recover(){
     super.recover();
-    this.scene.time.delayedCall(1000,()=> this.stopRecovering())
+    this.scene.time.delayedCall(400,()=> this.stopRecovering())
 }
 stopHurtAnimation(){
     super.stopHurtAnimation();

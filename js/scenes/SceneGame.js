@@ -71,8 +71,7 @@ export class SceneGame extends Phaser.Scene
             this.startSpaceAnim()
         }
         else{this.createLevel()}
-        this.loopMusic = this.sound.add("loopMusic",{volume:0.3,loop:true})
-        this.loopMusic.play(); 
+       
 
     }
 
@@ -86,6 +85,8 @@ export class SceneGame extends Phaser.Scene
         this.createCameras();
         this.createInteractions();
         this.createUI();
+        this.loopMusic = this.sound.add("loopMusic",{volume:0.3,loop:true})
+        this.loopMusic.play(); 
     }
     createBackground(){
         const bg1 = this.add.image(0,0,'bg1_level' + this.currentLevel);
@@ -235,7 +236,7 @@ export class SceneGame extends Phaser.Scene
     }
     onPlayerAttackNpc(meleehitbox,npc){
         this.sound.play('playerHit')
-        npc.hurt(npc.body.touching.left,50);
+        npc.hurt(meleehitbox.character.x < npc.x,50);
     }
     canPlayerAttackNpc(meleehitbox,npc){
         return !meleehitbox.character.isDead() &&  !npc.isDead() && !npc.isRecovering;
@@ -312,14 +313,14 @@ export class SceneGame extends Phaser.Scene
                     this.time.delayedCall(1500, () => {
                     explosion.destroy();
                     this.player.setVisible(true);
-                    this.player.anims.play('Run')
+                    this.player.playAnim('Run')
                     this.player.walkOnRight(60)
                     this.time.delayedCall(1500, () => {
-                        this.player.anims.play("Idle")
+                        this.player.playAnim("Idle")
                         this.player.stopWalking()
-                        this.showDialogue('Press "ENTER" to move to the next sentence or "ESC" to exit this dialogue.\n Unfortunately, your spaceship crashed,and you landed on an unknown planet. \n You have to find the back-up spaceship now, try to stay alive! \n press "WASD" to move, "K" to attack and "space" to jump, use combinations of keys too \n "heart" on the top left indicates your health status,and try collect more "diamond" \n good luck and hope you find your way home soon!')
+                        // this.showDialogue('Press "ENTER" to move to the next sentence or "ESC" to exit this dialogue.\n Unfortunately, your spaceship crashed,and you landed on an unknown planet. \n You have to find the back-up spaceship now, try to stay alive! \n press "WASD" to move, "K" to attack and "space" to jump, use combinations of keys too \n "heart" on the top left indicates your health status,and try collect more "diamond" \n good luck and hope you find your way home soon!')
                         this.cinematicOn = false
-                    })
+                    },this)
                     });
                     },
                     onCompleteScope:this
@@ -331,7 +332,7 @@ export class SceneGame extends Phaser.Scene
         const ship = this.add.image(1000, 100, "ship1").setScale(1.5);
         // ship.setRotation(Math.atan2(ship.y-this.player.y,ship.x-this.player.x)-Math.PI/4-Math.PI/2)
         ship.setAngle(180)
-        const titleStyle = { fontSize : "40px", color: CST.STYLE.COLOR.WHITE, strokeThickness : 4, stroke: "#000000", fontStyle: "bold",fontFamily:'fantasy'};
+        const titleStyle = { fontSize : "28px", color: CST.STYLE.COLOR.WHITE, strokeThickness : 4, stroke: "#000000", fontStyle: "bold",fontFamily:'fantasy',wordWrap: { width: space.width+50 },align: "center"};
         const title = this.add.text(CST.GAME.WIDTH/2, 600, "You are on the mission in a spacetrip, but something is wrong with your spaceship ", titleStyle).setOrigin(0.5)
         this.tweens.add({
                 targets: ship,

@@ -142,7 +142,17 @@ export class Player extends Character {
             this.body.setOffset(12, 30)
         }
     }
-
+    
+    playAnim(animName) {
+        this.anims.play(animName);
+        this.setFlipX(!this.isLookingRight)
+        if (this.flipX) {
+        this.body.setOffset(32, 30)
+        }
+        else {
+        this.body.setOffset(12, 30)
+        }
+        }
 
     updateControls() {
         if (this.keys.right.isDown) {
@@ -165,10 +175,15 @@ export class Player extends Character {
         this.anims.play("AttackA")
         
     }
+  
     jump(){
-        super.jump();
-        this.scene.sound.play('jump')
+            if (this.canJump()) {
+            this.scene.sound.play('jump')
+            }
+            
+            super.jump();
     }
+    
     recover() {
         super.recover();
 
