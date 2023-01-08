@@ -7,13 +7,15 @@ sceneGame = null;
 
 constructor()
 {
-super({key: CST.SCENES.GAME_UI});
+    super({key: CST.SCENES.GAME_UI});
 }
 
 init(data) {
-this.sceneGame = data.sceneGame;
-this.currentLevel = this.sceneGame.currentLevel
-this.sceneGame.events.on('levelClear',this.onLevelClear,this)
+    this.sceneGame = data.sceneGame;
+    this.sceneGame.sceneGameUI = this;
+
+    this.currentLevel = this.sceneGame.currentLevel
+    this.sceneGame.events.on('levelClear',this.onLevelClear,this)
 }
 
 create(){
@@ -34,6 +36,9 @@ create(){
     this.endlevelText = this.add.text(CST.GAME.WIDTH/2, CST.GAME.HEIGHT/2, this.currentLevel<CST.GAME.LEVEL_COUNT?
     "Congrats, you can move to next level!":"Congrats, you finished the game!", { color: "white", fontSize: "40px", bold: true }).setOrigin(0.5);
     this.endlevelText.setVisible(false)
+
+    this.dialogueBox.stop(true)
+        this.closeDialogue()
 }
 update(){
     this.diamondText.setText(this.sceneGame.diamondPoints)
@@ -74,7 +79,7 @@ createDialogue(){
   const dialogueHeight = 80;
   this.dialogueBox = this.rexUI.add.textBox(
     {background: this.add.image(0, 0, "dialogue"),
-    text: this.add.text(0, 0, "", {fontFamily: "fantasy", fontSize: "36px", fontStyle: "bold", color: "#FFFFFF", align: "center",wordWrap: { width: dialogueWidth }}).setFixedSize(dialogueWidth,dialogueHeight),
+    text: this.add.text(0, 0, "", {fontFamily: "fantasy", fontSize: "36px", fontStyle: "bold", color: "#FFFFFF", align: "center",wordWrap: { width: dialogueWidth - 40 }}).setFixedSize(dialogueWidth,dialogueHeight),
     space: {left: 30, right: 30, top: 40, bottom: 20,icon: 0, text: 0},
     page: {maxLines: 1,pageBreak: '\n'},
 }).setOrigin(0.5).layout()

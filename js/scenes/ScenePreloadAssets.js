@@ -86,6 +86,7 @@ export class ScenePreloadAssets extends Phaser.Scene
     preloadAudio() {
         this.load.setPath("./assets/audio");
         this.load.audio("loopMusic","./06 Unholy Illusions (LOOP).wav")
+        this.load.audio("animationMusic","./01 Waltz of the Dead (LOOP).wav")
         this.load.audio("shipExplosion","./Boss Kill 2.wav")
         this.load.audio("enemyKill","./Enemy Kill 5.wav")
         this.load.audio("playerHit","./Character Hit 4.wav")

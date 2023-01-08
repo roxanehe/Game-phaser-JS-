@@ -42,7 +42,8 @@ export class SceneGame extends Phaser.Scene
 
     init(data)
     {
-        this.currentLevel = data && data.level ? data.level : 1;
+        this.currentLevel = data && (data.level != undefined) ? data.level : 1;
+        this.showStartCinematic = data && (data.showStartCinematic != undefined) ? data.showStartCinematic : true;
     }
 
     // Preload
@@ -65,14 +66,13 @@ export class SceneGame extends Phaser.Scene
 
     create()
     {   
-         
         this.cinematicOn = false;
-        if(this.currentLevel==1){
-            this.startSpaceAnim()
+        if(this.currentLevel==1 && this.showStartCinematic){
+            this.startSpaceAnim();
         }
-        else{this.createLevel()}
-       
-
+        else{
+            this.createLevel()
+        }
     }
 
     createLevel()
@@ -85,6 +85,7 @@ export class SceneGame extends Phaser.Scene
         this.createCameras();
         this.createInteractions();
         this.createUI();
+
         this.loopMusic = this.sound.add("loopMusic",{volume:0.3,loop:true})
         this.loopMusic.play(); 
     }
@@ -161,7 +162,8 @@ export class SceneGame extends Phaser.Scene
         this.player.setScale(1);
         this.player.body.setSize(20,32)
 
-        this.player.on("die", () => this.time.delayedCall(3000, ()=> {this.scene.restart()}, null, this),this);
+        const sceneData = {showStartCinematic: false, level: this.currentLevel};
+        this.player.on("die", () => this.time.delayedCall(3000, ()=> {this.scene.restart(sceneData) }, null, this),this);
         // this.player.on("die", () => {this.time.delayedCall(2000, () => {this.scene.restart();}, null, this);}, this);
         
         this.ships = this.physics.add.group();
@@ -287,7 +289,7 @@ export class SceneGame extends Phaser.Scene
         }
         else
         {
-            this.sceneGameUI = this.scene.add(CST.SCENES.GAME_UI,SceneGameUI,true,sceneData);
+            this.scene.add(CST.SCENES.GAME_UI,SceneGameUI,true,sceneData);
         }
     }
     showDialogue(message){
@@ -310,7 +312,7 @@ export class SceneGame extends Phaser.Scene
                     this.cameras.main.shake(400, 0.002, false);
                     this.sound.play('shipExplosion',{volume:0.5})
                     const explosion = this.add.image(this.player.x, this.player.y, "explosion").setScale(1);
-                    this.time.delayedCall(1500, () => {
+                    this.time.delayedCall(500, () => {
                     explosion.destroy();
                     this.player.setVisible(true);
                     this.player.playAnim('Run')
@@ -318,9 +320,9 @@ export class SceneGame extends Phaser.Scene
                     this.time.delayedCall(1500, () => {
                         this.player.playAnim("Idle")
                         this.player.stopWalking()
-                        // this.showDialogue('Press "ENTER" to move to the next sentence or "ESC" to exit this dialogue.\n Unfortunately, your spaceship crashed,and you landed on an unknown planet. \n You have to find the back-up spaceship now, try to stay alive! \n press "WASD" to move, "K" to attack and "space" to jump, use combinations of keys too \n "heart" on the top left indicates your health status,and try collect more "diamond" \n good luck and hope you find your way home soon!')
+                        this.showDialogue('Press "ENTER" to move to the next instruction or "ESC" to exit this dialogue.\n Unfortunately, your spaceship crashed,and you landed on an unknown planet. \n You have to find the back-up spaceship now, try to stay alive! \n press "WASD" to move, "K" to attack and "space" to jump, use combinations of keys \n "heart" on the top left indicates your health status,and try collect more "diamond" \n good luck and hope you find your way home soon!')
                         this.cinematicOn = false
-                    },this)
+                    }, null, this)
                     });
                     },
                     onCompleteScope:this
@@ -334,20 +336,22 @@ export class SceneGame extends Phaser.Scene
         ship.setAngle(180)
         const titleStyle = { fontSize : "28px", color: CST.STYLE.COLOR.WHITE, strokeThickness : 4, stroke: "#000000", fontStyle: "bold",fontFamily:'fantasy',wordWrap: { width: space.width+50 },align: "center"};
         const title = this.add.text(CST.GAME.WIDTH/2, 600, "You are on the mission in a spacetrip, but something is wrong with your spaceship ", titleStyle).setOrigin(0.5)
+        this.sound.play('animationMusic',{volume:0.3})
         this.tweens.add({
                 targets: ship,
                 x: 600,
                 y: 600,
-                duration: 3000,
+                duration: 5000,
                 onComplete:()=>{
                     const explosion = this.add.image(ship.x, ship.y, "explosion").setScale(1);
                     this.time.delayedCall(1500, () => {
                       explosion.destroy();
                       space.destroy();
+                      this.sound.get('animationMusic').stop();
                       this.cinematicOn = false;
                       this.createLevel();
                       this.startShipAnim();
-                    })
+                    }, null, this)
                     ship.destroy();
                     title.destroy();
                 },
@@ -369,9 +373,9 @@ export class SceneGame extends Phaser.Scene
             this.bg2.tilePositionX = this.player.x *0.2;
             this.bg3.tilePositionX = this.player.x *0.2;
         }
-        if (this.npcs)
-       {
-        this.npcs.getChildren().forEach((npc) => { npc.update(); }, this);
-       }
+        if (this.npcs && this.npcs.children)
+        {
+            this.npcs.getChildren().forEach((npc) => { npc.update(); }, this);
+        }
     }
 }
