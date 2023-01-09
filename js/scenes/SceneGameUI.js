@@ -25,8 +25,8 @@ create(){
     for(let i =0;i<Math.ceil(this.sceneGame.player.health/2);i++){
         this.healthImage.push(this.add.image(64+i*24,54,'heartEmpty').setScale(3))
     }
-    this.diamondText = this.add.text(130, 10, "0", { color: "white", fontSize: "20px", bold: true }).setOrigin(1,0);
-    
+    this.diamondText = this.add.text(130, 10, "0", { color: "#00e591", fontSize: "20px", fontStyle: "bold" }).setOrigin(1,0);
+
     //create a dialogue
     this.createDialogue();
 
