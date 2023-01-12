@@ -335,7 +335,7 @@ export class SceneGame extends Phaser.Scene
         // ship.setRotation(Math.atan2(ship.y-this.player.y,ship.x-this.player.x)-Math.PI/4-Math.PI/2)
         ship.setAngle(180)
         const titleStyle = { fontSize : "28px", color: CST.STYLE.COLOR.WHITE, strokeThickness : 4, stroke: "#000000", fontStyle: "bold",fontFamily:'fantasy',wordWrap: { width: space.width+50 },align: "center"};
-        const title = this.add.text(CST.GAME.WIDTH/2, 600, "You are on the mission in a spacetrip, but something is wrong with your spaceship ", titleStyle).setOrigin(0.5)
+        const title = this.add.text(CST.GAME.WIDTH/2, 600, "You are on the mission in a space trip, but something is wrong with your spaceship ", titleStyle).setOrigin(0.5)
         this.sound.play('animationMusic',{volume:0.3})
         this.tweens.add({
                 targets: ship,
